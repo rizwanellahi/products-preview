@@ -1,0 +1,25 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+@import './custom-styles.css';
+@import './glide.core.min.css';
+@import './components/restauran-menu.css';
+@import './components/microslide';
+@import './scss/test.scss';
+@import './scss/gsap-menu.scss';
+@import './scss/menu-style.scss';
+
+@layer base {
+	html {
+		font-family: Poppins, sans-serif;
+		font-weight: 300;
+		font-size: 1.2rem;
+	}
+}
+
+img {
+	max-width: 100%;
+	vertical-align: middle;
+	transition: filter 0.3s;
+}
