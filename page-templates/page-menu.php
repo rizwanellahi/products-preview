@@ -53,8 +53,7 @@ $posts_array = $query->have_posts() ? $query->posts : [];
 
         <!-- ========== MAIN CONTENT ========== -->
         <main id="main-content" class="page-sections">
-            <div class="menu-container mx-auto px-8 lg:px-4 max-w-4xl lg:max-w-7xl bg-white"
-                style="background-color:<?php echo $theme_background_color; ?>">
+            <div class="menu-container mx-auto max-w-2xl lg:px-4 lg:max-w-4xl bg-white" style="background-color:<?php echo $theme_background_color; ?>">
 
                 <?php
                 /**

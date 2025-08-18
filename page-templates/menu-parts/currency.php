@@ -33,7 +33,7 @@ if ('Bahrain' === $country) {
 } elseif ('United Arab Emirates' === $country) {
     $currency = is_rtl() ? 'درهم' : 'AED';
 } elseif ('Qatar' === $country) {
-    $currency = is_rtl() ? 'ر.ق' : 'QR';
+    $currency = is_rtl() ? 'ر.ق' : 'QAR';
 } elseif ('United States' === $country) {
     $currency = '$';
 } elseif ('Kuwait' === $country) {
@@ -49,9 +49,8 @@ if ('Bahrain' === $country) {
             <?php if ($item_price_label): ?>
                 <small><?php echo $item_price_label ?></small>
             <?php endif; ?>
-            <span class="font-medium brand-color">
-                <?php echo esc_html($item_price); ?>
-                <?php echo $currency; ?></span>
+            <span class="font-medium brand-color"><?php echo esc_html($item_price); ?>
+            <?php  echo $currency; ?></span>
         </div>
         <div class="leading-none">
             <?php if ($second_item_price_label && $second_item_price): ?>
@@ -66,13 +65,8 @@ if ('Bahrain' === $country) {
         </div>
     </div>
 <?php else: ?>
-    <?php if ($item_price): ?>
-        <div class="text-base">
-            <span
-                class="font-medium <?php echo $price_currency_color ? 'brand-color' : ''; ?>"><?php echo esc_html($item_price); ?></span>
-            <span class="font-medium">
-                <?php echo $currency; ?>
-            </span>
-        </div>
-    <?php endif; ?>
+    <div class="text-base">
+        <span class="font-medium <?php echo $price_currency_color ?  'brand-color' : ''; ?>"><?php echo esc_html($item_price); ?></span>
+        <?php echo $currency; ?>
+    </div>
 <?php endif ?>

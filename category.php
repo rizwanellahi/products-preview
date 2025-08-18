@@ -1,96 +1,69 @@
 <?php
 /**
  * category.php
- * 
- * Template for displaying restaurant_menu items by WP default categories 
+ *
+ * Template for displaying restaurant_menu items by WP default categories
  */
 
 get_header();
 
 // 1) Get the current category object and build a custom query.
-$category_obj = get_queried_object();
-$category_slug = $category_obj->slug;
+$category_obj  = get_queried_object();
+$category_slug = $category_obj ? $category_obj->slug : '';
 
-$country_symbol = get_field('country_symbol', 'option');
-
+$country_symbol         = get_field('country_symbol', 'option');
 $theme_background_color = get_field('theme_background_color', 'option');
 
 $args = [
-    'post_type' => 'restaurant_menu',
-    'posts_per_page' => -1,
-    'post_status' => 'publish',
-    'orderby' => 'DESC',
-    'tax_query' => [
+    'post_type'      => 'restaurant_menu',
+    'posts_per_page' => -1,          // show all
+    'post_status'    => 'publish',
+    'orderby'        => 'date',      // <-- fixed
+    'order'          => 'DESC',      // <-- added
+    'tax_query'      => [
         [
-            'taxonomy' => 'category',
-            'field' => 'slug',
-            'terms' => $category_slug,
+            'taxonomy' => 'category', // using default WP categories
+            'field'    => 'slug',
+            'terms'    => $category_slug,
         ],
     ],
 ];
+
 $query = new WP_Query($args);
-$posts_array = $query->have_posts() ? $query->posts : [];
-
 ?>
-<div id="restaurant-menu" style="background-color:<?php echo $theme_background_color; ?>">
 
-    <?php get_template_part('page-templates/menu-parts/header'); // Your custom header part ?>
+<div id="restaurant-menu" style="background-color:<?php echo esc_attr($theme_background_color); ?>">
 
-    <div class="menu-list relative z-50">
+  <?php
+  // Custom header partial
+  get_template_part('page-templates/menu-parts/header');
+  ?>
 
-        <?php
-        /**
-         * Partial: Navigation
-         * Pass $posts_array so the partial can create anchor links, etc.
-         */
-        get_template_part(
-            'template-parts/menu/nav',
-            null,
-            [
-                'posts_array' => $posts_array,
-            ]
-        );
-        ?>
+  <div class="menu-list container">
+    <?php if ($query->have_posts()) : ?>
+      <ul class="menu-items">
+        <?php while ($query->have_posts()) : $query->the_post(); ?>
+          <li class="menu-item">
+            <a href="<?php echo esc_url(get_permalink()); ?>">
+              <?php
+              // Optional: thumbnail
+              if (has_post_thumbnail()) {
+                  echo get_the_post_thumbnail(get_the_ID(), 'thumbnail', ['alt' => esc_attr(get_the_title())]);
+              }
+              ?>
+              <span class="menu-item-title"><?php echo esc_html(get_the_title()); ?></span>
+            </a>
+          </li>
+        <?php endwhile; ?>
+      </ul>
+    <?php else : ?>
+      <p><?php esc_html_e('No items found in this category.', 'your-textdomain'); ?></p>
+    <?php endif; wp_reset_postdata(); ?>
+  </div>
 
-        <!-- ========== MAIN CONTENT ========== -->
-        <main id="main-content" class="page-sections">
-            <div class="menu-container mx-auto px-4 lg:px-4 pt-6 max-w-4xl lg:max-w-7xl bg-white"
-                style="background-color:<?php echo $theme_background_color; ?>">
-
-                <?php
-                /**
-                 * Partial: Menu Content
-                 * Pass the same $posts_array to loop over them again 
-                 * and display flexible fields, two-column layout, modals, etc.
-                 */
-                get_template_part(
-                    'template-parts/menu/content',
-                    null,
-                    [
-                        'posts_array' => $posts_array,
-                        'country_symbol' => $country_symbol,
-                    ]
-                );
-                ?>
-
-            </div> <!-- .menu-container -->
-        </main> <!-- #main-content -->
-    </div> <!-- .menu-list -->
 </div> <!-- #restaurant-menu -->
 
 <?php
-/**
- * Partial: Menu Categories Modal
- * This is the popup listing each post (with item counts)
- */
-get_template_part(
-    'template-parts/menu/categories-modal',
-    null,
-    [
-        'posts_array' => $posts_array,
-    ]
-);
-
 // Additional template parts or partials if needed
 get_template_part('page-templates/menu-parts/info');
 get_template_part('page-templates/menu-parts/footer');

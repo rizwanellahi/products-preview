@@ -256,48 +256,6 @@
                             "parent_repeater": "field_5f4e0fbfad0b0"
                         },
                         {
-                            "key": "field_6898186080e20",
-                            "label": "Preparation Time",
-                            "name": "preparation_time",
-                            "aria-label": "",
-                            "type": "text",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "default_value": "",
-                            "maxlength": "",
-                            "placeholder": "",
-                            "prepend": "",
-                            "append": "",
-                            "parent_repeater": "field_5f4e0fbfad0b0"
-                        },
-                        {
-                            "key": "field_68981b7080e21",
-                            "label": "Preparation Time Label",
-                            "name": "preparation_time_label",
-                            "aria-label": "",
-                            "type": "text",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "default_value": "minutes",
-                            "maxlength": "",
-                            "placeholder": "",
-                            "prepend": "",
-                            "append": "",
-                            "parent_repeater": "field_5f4e0fbfad0b0"
-                        },
-                        {
                             "key": "field_6702d530a8d29",
                             "label": "Popular",
                             "name": "is_popular",
@@ -349,15 +307,10 @@
                                 "id": ""
                             },
                             "choices": {
-                                "Gluten": "Gluten",
-                                "Seafood": "Seafood",
-                                "Salt": "Salt",
-                                "Dairy": "Dairy",
-                                "Crustaceous": "Crustaceous",
+                                "Vegan": "Vegan",
+                                "Gluten-Free": "Gluten-Free",
                                 "Spicy": "Spicy",
-                                "Cheese": "Cheese",
-                                "Sesame": "Sesame",
-                                "Mollusca": "Mollusca"
+                                "New": "New"
                             },
                             "default_value": [],
                             "return_format": "value",
@@ -716,5 +669,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1755519414
+    "modified": 1752913313
 }

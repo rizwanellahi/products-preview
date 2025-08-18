@@ -16,17 +16,17 @@ function assets_enqueues()
     $css_file = get_template_directory() . '/build/css/app.css';
     $css_version = file_exists($css_file) ? filemtime($css_file) : '1.0';  // Check if file exists before using filemtime
 
-    wp_enqueue_style('template-css', $url_template . '/themes/logix360-menu-tablet/build/css/app.css', array(), $css_version);
+    wp_enqueue_style('template-css', $url_template . '/themes/products-preview/build/css/app.css', array(), $css_version);
 
     // JS files with file modification time as version
-    $app_js_file = get_template_directory() . '/build/js/app.js';  // Removed the duplicate 'themes/logix360-menu-tablet'
+    $app_js_file = get_template_directory() . '/build/js/app.js';  // Removed the duplicate 'themes/products-preview'
     $app_js_version = file_exists($app_js_file) ? filemtime($app_js_file) : '1.0';  // Check if file exists
 
-    wp_enqueue_script('jquery-js', $url_template . '/themes/logix360-menu-tablet/vendor/js/jquery.min.js', array(), null, true);
-    wp_enqueue_script('modal-js', $url_template . '/themes/logix360-menu-tablet/vendor/js/microModal.min.js', array(), null, true);
-    wp_enqueue_script('glide-js', $url_template . '/themes/logix360-menu-tablet/vendor/js/glide.min.js', array(), null, true);
-    wp_enqueue_script('menu-js', $url_template . '/themes/logix360-menu-tablet/build/js/restaurant-menu.js', array(), $app_js_version, true);
-    wp_enqueue_script('app-js', $url_template . '/themes/logix360-menu-tablet/build/js/app.js', array(), $app_js_version, true);
+    wp_enqueue_script('jquery-js', $url_template . '/themes/products-preview/vendor/js/jquery.min.js', array(), null, true);
+    wp_enqueue_script('modal-js', $url_template . '/themes/products-preview/vendor/js/microModal.min.js', array(), null, true);
+    wp_enqueue_script('glide-js', $url_template . '/themes/products-preview/vendor/js/glide.min.js', array(), null, true);
+    wp_enqueue_script('menu-js', $url_template . '/themes/products-preview/build/js/restaurant-menu.js', array(), $app_js_version, true);
+    wp_enqueue_script('app-js', $url_template . '/themes/products-preview/build/js/app.js', array(), $app_js_version, true);
 
 }
 

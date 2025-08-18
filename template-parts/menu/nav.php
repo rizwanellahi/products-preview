@@ -14,8 +14,7 @@ $card_background_color = get_field('card_background_color', 'option');
 ?>
 
 <!-- ========== NAV SECTIONS ========== -->
-<nav class="hidden nav-sections mx-auto max-w-2xl lg:max-w-4xl rounded-lg"
-    style="background-color:<?php echo $card_background_color ?>">
+<nav class="nav-sections mx-auto max-w-2xl lg:max-w-4xl rounded-lg" style="background-color:<?php echo $card_background_color ?>">
     <a href="javascript:;" data-micromodal-trigger="menu-cat" class="block" aria-label="Open item categories">
         <div class="absolute top-0 rtl:right-0 ltr:left-0 h-[99%] flex items-center z-[99] px-2">
             <!-- Burger Icon -->

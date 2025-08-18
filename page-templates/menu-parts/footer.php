@@ -3,15 +3,9 @@ $brand_logo = get_field('logo', 'option');
 $brand_name = get_field('name', 'option');
 $logo_background_color = get_field('logo_background_color', 'option');
 ?>
-<footer class="footer-footer bg-primary-100 relative z-[9]">
+<footer class="bg-primary-100 relative z-[9]">
     <div class="mx-auto max-w-7xl overflow-hidden py-6 px-6 sm:py-8 lg:px-8">
-        <div class="flex justify-center mb-6 lg:mb-8">
-            <div class="brand_logo inline-block rounded-full p-1"
-                style="background-color: <?php echo esc_attr($logo_background_color); ?>;">
-                <img class="inline-block sm:h-[90px] h-[70px] w-[70px] sm:w-[90px] rounded-full object-contain object-center"
-                    src="<?php echo esc_url($brand_logo); ?>" alt="Footer Logo" />
-            </div>
-        </div>
+       
         <p class="mt-5 text-center text-sm leading-5 text-gray-100">
             ©&nbsp;
             <script>

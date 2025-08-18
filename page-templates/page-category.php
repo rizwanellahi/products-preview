@@ -73,51 +73,37 @@ $theme_background_color = get_field('theme_background_color', 'option');
 
 <div id="restaurant-menu" class="menu-selection" style="background-color:<?php echo $theme_background_color; ?>">
     <?php get_template_part('page-templates/menu-parts/header'); ?>
-    <div class="bg-white py-8" style="background-color:<?php echo $theme_background_color; ?>">
-        <div class="mx-auto max-w-4xl lg:max-w-7xl">
-            <div class="px-8 lg:px-8">
-                <div
-                    class="restaurant-menu-category-cards mx-auto grid auto-rows-fr grid-cols-1 sm:grid-cols-2 gap-8 lg:mx-0 lg:max-w-none">
-                    <?php if (!empty($menu_items)): ?>
-                        <?php foreach ($menu_items as $item): ?>
-                            <a href="<?php echo esc_url($item->url); ?>" class="relative flex h-64 flex-col overflow-hidden rounded-2xl p-6 
-          text-white w-auto
-         hover:opacity-75 active:scale-95 
-         transition transform duration-150 ease-out">
-                                <span aria-hidden="true" class="absolute inset-0">
-                                    <?php if (!empty($item->image)): ?>
-                                        <img src="<?php echo esc_url($item->image); ?>" alt="<?php echo esc_attr($item->name); ?>"
-                                            class="size-full object-cover" />
-                                    <?php endif; ?>
-                                </span>
-                                <span aria-hidden="true"
-                                    class="absolute inset-x-0 bottom-0 h-full bg-gradient-to-t from-gray-900 opacity-100"></span>
-                                <span class="relative mt-auto text-center text-3xl font-medium tracking-wider text-white">
-                                    <?php echo esc_html($item->title); ?>
-                                </span>
-                            </a>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <?php foreach ($categories as $category): ?>
-                            <?php
-                            // Get category link
-                            $category_link = get_term_link($category);
-                            ?>
-                            <a href="<?php echo esc_url($category->url); ?>"
-                                class="categorized_item relative isolate flex flex-col justify-center items-center overflow-hidden rounded-2xl bg-gray-50 px-8 pb-8 pt-20">
-                                <?php if (!empty($category->image)): ?>
-                                    <img src="<?php echo esc_url($category->image); ?>"
-                                        alt="<?php echo esc_attr($category->name); ?>"
-                                        class="absolute inset-0 -z-10 size-full object-cover" />
-                                <?php endif; ?>
-                                <h3 class="mt-3 text-2xl/8 font-medium text-white">
-                                    <!-- <span class="absolute inset-0"></span> -->
-                                    <?php echo esc_html($category->name); ?>
-                                </h3>
-                            </a>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
-                </div>
+    <div class="bg-white py-6 sm:py-14" style="background-color:<?php echo $theme_background_color; ?>">
+        <div class="mx-auto max-w-xl px-6 lg:px-8">
+            <div class="restaurant-menu-category-cards mx-auto grid max-w-2xl auto-rows-fr grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4 lg:mx-0 lg:max-w-none">
+                <?php if (!empty($menu_items)): ?>
+                    <?php foreach ($menu_items as $item): ?>
+
+                        <a href="<?php echo esc_url($item->url); ?>" class="bg-gray-800 relative flex p- flex-col overflow-hidden rounded-2xl p-4 hover:opacity-75 w-auto">
+                            
+                            <span class="relative mt-auto text-center text-xl font-medium tracking-wider text-white">
+                                <?php echo esc_html($item->title); ?>
+                            </span>
+                        </a>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <?php foreach ($categories as $category): ?>
+                        <?php
+                        // Get category link
+                        $category_link = get_term_link($category);
+                        ?>
+                        <a href="<?php echo esc_url($category->url); ?>" class="categorized_item relative isolate flex flex-col justify-center items-center overflow-hidden rounded-2xl bg-gray-200 p-20">
+                            <?php if (!empty($category->image)): ?>
+                                <img src="<?php echo esc_url($category->image); ?>" alt="<?php echo esc_attr($category->name); ?>"
+                                    class="absolute inset-0 -z-10 size-full object-cover" />
+                            <?php endif; ?>
+                            <h3 class="text-2xl/8 font-medium text-white">
+                                <!-- <span class="absolute inset-0"></span> -->
+                                <?php echo esc_html($category->name); ?>
+                            </h3>
+                        </a>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </div>
         </div>
     </div>
