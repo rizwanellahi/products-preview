@@ -14,8 +14,8 @@ get_header();
 $terms = get_terms([
   'taxonomy'   => 'funnel_category',
   'hide_empty' => true,
-  'orderby'    => 'name',
-  'order'      => 'ASC',
+  'orderby'    => 'count', // sort by number of posts
+  'order'      => 'DESC',  // most posts first
 ]);
 
 ?>
