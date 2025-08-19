@@ -1,7 +1,7 @@
 <?php
 /**
- * Single Template for Funnel
- * File: single-funnel.php
+ * Single Template for Project
+ * File: single-project.php
  */
 
 get_header();
