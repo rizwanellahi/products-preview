@@ -1,70 +1,70 @@
 <?php
-/* --- CPT: Projects --- */
-function create_posttype_projects()
+/* --- CPT: Funnels --- */
+function create_posttype_funnels()
 {
     $supports = array('title', 'editor', 'author', 'thumbnail', 'custom-fields', 'revisions', 'post-formats');
     $labels = array(
-        'name' => _x('Projects', 'plural'),
-        'singular_name' => _x('Project', 'singular'),
-        'menu_name' => _x('Projects', 'admin menu'),
-        'name_admin_bar' => _x('Project', 'admin bar'),
-        'add_new' => _x('Add New', 'project'),
-        'add_new_item' => __('Add New Project'),
-        'new_item' => __('New Project'),
-        'edit_item' => __('Edit Project'),
-        'view_item' => __('View Project'),
-        'all_items' => __('All Projects'),
-        'search_items' => __('Search Projects'),
-        'not_found' => __('No Projects found.'),
+        'name'               => _x('Funnels', 'plural'),
+        'singular_name'      => _x('Funnel', 'singular'),
+        'menu_name'          => _x('Funnels', 'admin menu'),
+        'name_admin_bar'     => _x('Funnel', 'admin bar'),
+        'add_new'            => _x('Add New', 'funnel'),
+        'add_new_item'       => __('Add New Funnel'),
+        'new_item'           => __('New Funnel'),
+        'edit_item'          => __('Edit Funnel'),
+        'view_item'          => __('View Funnel'),
+        'all_items'          => __('All Funnels'),
+        'search_items'       => __('Search Funnels'),
+        'not_found'          => __('No Funnels found.'),
     );
 
     $args = array(
-        'supports'     => $supports,
-        'labels'       => $labels,
-        'public'       => true,
-        'query_var'    => true,
+        'supports'      => $supports,
+        'labels'        => $labels,
+        'public'        => true,
+        'query_var'     => true,
         // IMPORTANT: include taxonomy placeholder
-        'has_archive' => 'projects',   // force archive URL = /projects/
-        'rewrite'     => [
-            'slug'       => 'projects/%project_category%', // still used for singles
+        'has_archive'   => 'funnels',   // force archive URL = /funnels/
+        'rewrite'       => [
+            'slug'       => 'funnels/%funnel_category%', // still used for singles
             'with_front' => false,
         ],
-        'hierarchical' => false,
-        'menu_icon'    => 'dashicons-portfolio',
-        'show_in_rest' => true,
+        'hierarchical'  => false,
+        'menu_icon'     => 'dashicons-portfolio',
+        'show_in_rest'  => true,
     );
 
-    register_post_type('project', $args);
+    register_post_type('funnel', $args);
 }
-add_action('init', 'create_posttype_projects');
+add_action('init', 'create_posttype_funnels');
 
 
-/* --- Taxonomy: Project Categories --- */
-function create_project_taxonomy()
+/* --- Taxonomy: Funnel Categories --- */
+function create_funnel_taxonomy()
 {
     $labels = array(
-        'name'              => _x('Project Categories', 'taxonomy general name'),
-        'singular_name'     => _x('Project Category', 'taxonomy singular name'),
-        'search_items'      => __('Search Project Categories'),
-        'all_items'         => __('All Project Categories'),
+        'name'              => _x('Funnel Categories', 'taxonomy general name'),
+        'singular_name'     => _x('Funnel Category', 'taxonomy singular name'),
+        'search_items'      => __('Search Funnel Categories'),
+        'all_items'         => __('All Funnel Categories'),
         'parent_item'       => __('Parent Category'),
         'parent_item_colon' => __('Parent Category:'),
-        'edit_item'         => __('Edit Project Category'),
-        'update_item'       => __('Update Project Category'),
-        'add_new_item'      => __('Add New Project Category'),
-        'new_item_name'     => __('New Project Category Name'),
-        'menu_name'         => __('Project Categories'),
+        'edit_item'         => __('Edit Funnel Category'),
+        'update_item'       => __('Update Funnel Category'),
+        'add_new_item'      => __('Add New Funnel Category'),
+        'new_item_name'     => __('New Funnel Category Name'),
+        'menu_name'         => __('Funnel Categories'),
     );
 
-    // Enable pretty term URLs under /projects/
+    // Enable pretty term URLs under /funnels/
     $args = array(
         'hierarchical'       => true,
         'labels'             => $labels,
         'show_ui'            => true,
         'show_admin_column'  => true,
-        'query_var'          => 'project_category',
+        'query_var'          => 'funnel_category',
         'rewrite'            => array(
-            'slug'         => 'projects',   // /projects/{term}
+            'slug'         => 'funnels',   // /funnels/{term}
             'with_front'   => false,
             'hierarchical' => true,
         ),
@@ -74,20 +74,20 @@ function create_project_taxonomy()
         'show_in_rest'       => true,
     );
 
-    register_taxonomy('project_category', array('project'), $args);
+    register_taxonomy('funnel_category', array('funnel'), $args);
 }
-add_action('init', 'create_project_taxonomy', 0);
+add_action('init', 'create_funnel_taxonomy', 0);
 
 
-/* --- Replace %project_category% in single permalinks --- */
-function projects_permalink_structure($permalink, $post)
+/* --- Replace %funnel_category% in single permalinks --- */
+function funnels_permalink_structure($permalink, $post)
 {
-    if ($post->post_type !== 'project') {
+    if ($post->post_type !== 'funnel') {
         return $permalink;
     }
 
     // Get a category (use Yoast primary here if you want; this picks the first)
-    $terms = wp_get_post_terms($post->ID, 'project_category', array('orderby' => 'term_order'));
+    $terms = wp_get_post_terms($post->ID, 'funnel_category', array('orderby' => 'term_order'));
 
     if (! empty($terms) && ! is_wp_error($terms)) {
         $category = $terms[0]->slug;
@@ -95,33 +95,32 @@ function projects_permalink_structure($permalink, $post)
         $category = 'uncategorized';
     }
 
-    return str_replace('%project_category%', $category, $permalink);
+    return str_replace('%funnel_category%', $category, $permalink);
 }
-add_filter('post_type_link', 'projects_permalink_structure', 10, 2);
+add_filter('post_type_link', 'funnels_permalink_structure', 10, 2);
 
-/* --- Add rewrite rules so /projects/{category}/{post} resolves --- */
-function projects_add_rewrite_rules()
+/* --- Add rewrite rules so /funnels/{category}/{post} resolves --- */
+function funnels_add_rewrite_rules()
 {
-    // Single: /projects/{category}/{post}
+    // Single: /funnels/{category}/{post}
     add_rewrite_rule(
-        '^projects/([^/]+)/([^/]+)/?$',
-        'index.php?project=$matches[2]&project_category=$matches[1]',
+        '^funnels/([^/]+)/([^/]+)/?$',
+        'index.php?funnel=$matches[2]&funnel_category=$matches[1]',
         'top'
     );
 
-    // Optional: paginated term archives already handled by taxonomy rewrite, but keep CPT archive too:
-    // /projects (archive)
+    // /funnels (archive)
     add_rewrite_rule(
-        '^projects/?$',
-        'index.php?post_type=project',
+        '^funnels/?$',
+        'index.php?post_type=funnel',
         'top'
     );
 }
-add_action('init', 'projects_add_rewrite_rules');
+add_action('init', 'funnels_add_rewrite_rules');
 
-/* --- (Optional) Make sure WP recognizes the %project_category% tag --- */
-function projects_add_rewrite_tag()
+/* --- (Optional) Make sure WP recognizes the %funnel_category% tag --- */
+function funnels_add_rewrite_tag()
 {
-    add_rewrite_tag('%project_category%', '([^&/]+)', 'project_category=');
+    add_rewrite_tag('%funnel_category%', '([^&/]+)', 'funnel_category=');
 }
-add_action('init', 'projects_add_rewrite_tag');
+add_action('init', 'funnels_add_rewrite_tag');

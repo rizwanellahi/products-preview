@@ -1,5 +1,5 @@
 <?php
-/* taxonomy-project_category.php */
+/* taxonomy-funnel_category.php */
 get_header();
 
 $term = get_queried_object();
@@ -12,7 +12,7 @@ $term = get_queried_object();
       <nav class="text-sm text-slate-600 mb-4">
         <a href="<?php echo esc_url( home_url('/') ); ?>" class="hover:underline">Home</a>
         <span class="mx-2">/</span>
-        <a href="<?php echo esc_url( get_post_type_archive_link('project') ); ?>" class="hover:underline">Projects</a>
+        <a href="<?php echo esc_url( get_post_type_archive_link('funnel') ); ?>" class="hover:underline">Funnels</a>
         <span class="mx-2">/</span>
         <span class="text-slate-900 font-medium"><?php single_term_title(); ?></span>
       </nav>
@@ -31,7 +31,7 @@ $term = get_queried_object();
 
       <?php if ( have_posts() ) : ?>
         <!-- Grid -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+        <div class="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-3 gap-6">
           <?php while ( have_posts() ) : the_post(); ?>
             <article <?php post_class('group overflow-hidden rounded-2xl bg-white ring-1 ring-slate-200 shadow-sm hover:shadow-md transition'); ?>>
               <a href="<?php the_permalink(); ?>" class="block">
@@ -48,8 +48,8 @@ $term = get_queried_object();
                 </div>
               </a>
 
-              <div class="p-5">
-                <h2 class="text-lg font-semibold leading-tight text-slate-900">
+              <div class="p-3 sm:p-5">
+                            <h3 class="text-base sm:text-lg font-semibold leading-tight text-slate-900">
                   <a href="<?php the_permalink(); ?>" class="hover:underline"><?php the_title(); ?></a>
                 </h2>
 
@@ -64,7 +64,7 @@ $term = get_queried_object();
                 </p>
 
                 <?php
-                $post_terms = get_the_terms( get_the_ID(), 'project_category' );
+                $post_terms = get_the_terms( get_the_ID(), 'funnel_category' );
                 if ( $post_terms && ! is_wp_error( $post_terms ) ) : ?>
                   <div class="mt-4 flex flex-wrap gap-2">
                     <?php foreach ( $post_terms as $pt ) : ?>
@@ -87,16 +87,16 @@ $term = get_queried_object();
             'mid_size'  => 1,
             'prev_text' => '<span class="inline-flex items-center rounded-xl border border-slate-200 px-3 py-1.5 text-sm hover:bg-slate-50">Previous</span>',
             'next_text' => '<span class="inline-flex items-center rounded-xl border border-slate-200 px-3 py-1.5 text-sm hover:bg-slate-50">Next</span>',
-            'screen_reader_text' => 'Projects navigation',
+            'screen_reader_text' => 'Funnels navigation',
           ]);
           ?>
         </nav>
       <?php else : ?>
         <div class="rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center">
-          <p class="text-slate-600">No projects found in this category.</p>
-          <a href="<?php echo esc_url( get_post_type_archive_link('project') ); ?>"
+          <p class="text-slate-600">No funnels found in this category.</p>
+          <a href="<?php echo esc_url( get_post_type_archive_link('funnel') ); ?>"
              class="mt-4 inline-flex items-center rounded-xl bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800">
-            Back to all projects
+            Back to all funnels
           </a>
         </div>
       <?php endif; ?>
