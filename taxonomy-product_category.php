@@ -1,0 +1,110 @@
+<?php
+/* taxonomy-product_category.php */
+get_header();
+$term = get_queried_object();
+?>
+
+<main id="primary" class="min-h-screen bg-slate-50">
+  <section class="relative">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
+      <!-- Breadcrumbs -->
+      <nav class="text-sm text-slate-600 mb-4">
+        <a href="<?php echo esc_url(home_url('/')); ?>" class="hover:underline">Home</a>
+        <span class="mx-2">/</span>
+        <a href="<?php echo esc_url(get_post_type_archive_link('product')); ?>" class="hover:underline">Products</a>
+        <span class="mx-2">/</span>
+        <span class="text-slate-900 font-medium"><?php single_term_title(); ?></span>
+      </nav>
+
+      <!-- Header -->
+      <header class="mb-8">
+        <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-slate-900">
+          <?php echo esc_html(single_term_title('', false)); ?>
+        </h1>
+        <?php if (term_description()) : ?>
+          <div class="prose prose-slate max-w-none mt-3 text-slate-700">
+            <?php echo wp_kses_post(term_description()); ?>
+          </div>
+        <?php endif; ?>
+      </header>
+
+      <?php if (have_posts()) : ?>
+        <div class="overflow-x-auto rounded-2xl ring-1 ring-slate-200 bg-white shadow-sm">
+          <table class="min-w-full divide-y divide-slate-200">
+            <thead class="bg-slate-50">
+              <tr>
+                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-600">Product</th>
+                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-600">Description</th>
+                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-600">SKU</th>
+                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-600">Price</th>
+                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-600">Categories</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+              <?php while (have_posts()) : the_post();
+                $price = get_post_meta(get_the_ID(), '_price', true);
+                $sku   = get_post_meta(get_the_ID(), '_sku', true);
+                $excerpt = get_the_excerpt();
+                if (!$excerpt) {
+                  $excerpt = wp_trim_words(wp_strip_all_tags(get_the_content('')), 24, '…');
+                }
+                $row_terms = get_the_terms(get_the_ID(), 'product_category');
+              ?>
+                <tr class="hover:bg-slate-50">
+                  <td class="px-4 py-3 align-top">
+                    <div class="flex items-center gap-3">
+                      <a href="<?php the_permalink(); ?>" class="block size-12 overflow-hidden rounded-lg ring-1 ring-slate-200 bg-slate-100">
+                        <?php if (has_post_thumbnail()) {
+                          the_post_thumbnail('thumbnail', ['class'=>'h-full w-full object-cover','loading'=>'lazy','alt'=>esc_attr(get_the_title())]);
+                        } ?>
+                      </a>
+                      <div>
+                        <a href="<?php the_permalink(); ?>" class="font-medium text-slate-900 hover:underline"><?php the_title(); ?></a>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-4 py-3 align-top text-sm text-slate-700"><?php echo esc_html($excerpt); ?></td>
+                  <td class="px-4 py-3 align-top text-sm text-slate-700"><?php echo $sku ? esc_html($sku) : '—'; ?></td>
+                  <td class="px-4 py-3 align-top text-sm text-slate-900 font-semibold"><?php echo $price !== '' ? esc_html($price) : '—'; ?></td>
+                  <td class="px-4 py-3 align-top">
+                    <?php if ($row_terms && !is_wp_error($row_terms)) : ?>
+                      <div class="flex flex-wrap gap-1.5">
+                        <?php foreach ($row_terms as $t) : ?>
+                          <a href="<?php echo esc_url(get_term_link($t)); ?>" class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-700 hover:bg-slate-200">
+                            <?php echo esc_html($t->name); ?>
+                          </a>
+                        <?php endforeach; ?>
+                      </div>
+                    <?php endif; ?>
+                  </td>
+                </tr>
+              <?php endwhile; ?>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <nav class="mt-10">
+          <?php
+          the_posts_pagination([
+            'mid_size'  => 1,
+            'prev_text' => '<span class="inline-flex items-center rounded-xl border border-slate-200 px-3 py-1.5 text-sm hover:bg-slate-50">Previous</span>',
+            'next_text' => '<span class="inline-flex items-center rounded-xl border border-slate-200 px-3 py-1.5 text-sm hover:bg-slate-50">Next</span>',
+            'screen_reader_text' => 'Products navigation',
+          ]);
+          ?>
+        </nav>
+      <?php else : ?>
+        <div class="rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center">
+          <p class="text-slate-600">No products found in this category.</p>
+          <a href="<?php echo esc_url(get_post_type_archive_link('product')); ?>"
+             class="mt-4 inline-flex items-center rounded-xl bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800">
+            Back to all products
+          </a>
+        </div>
+      <?php endif; ?>
+    </div>
+  </section>
+</main>
+
+<?php get_footer(); ?>

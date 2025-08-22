@@ -123,4 +123,124 @@ function funnels_add_rewrite_tag()
 {
     add_rewrite_tag('%funnel_category%', '([^&/]+)', 'funnel_category=');
 }
-add_action('init', 'funnels_add_rewrite_tag');
+add_action('init', 'funnels_add_rewrite_tag'); ?>
+
+
+
+<?php
+/* --- CPT: Products --- */
+function create_posttype_products() {
+    $supports = array('title','editor','author','thumbnail','custom-fields','revisions','post-formats');
+    $labels = array(
+        'name'               => _x('Products', 'plural'),
+        'singular_name'      => _x('Product', 'singular'),
+        'menu_name'          => _x('Products', 'admin menu'),
+        'name_admin_bar'     => _x('Product', 'admin bar'),
+        'add_new'            => _x('Add New', 'product'),
+        'add_new_item'       => __('Add New Product'),
+        'new_item'           => __('New Product'),
+        'edit_item'          => __('Edit Product'),
+        'view_item'          => __('View Product'),
+        'all_items'          => __('All Products'),
+        'search_items'       => __('Search Products'),
+        'not_found'          => __('No Products found.'),
+    );
+
+    $args = array(
+        'supports'      => $supports,
+        'labels'        => $labels,
+        'public'        => true,
+        'query_var'     => true,
+        'has_archive'   => 'products', // /products/
+        'rewrite'       => [
+            'slug'       => 'products/%product_category%', // used for singles
+            'with_front' => false,
+        ],
+        'hierarchical'  => false,
+        'menu_icon'     => 'dashicons-products',
+        'show_in_rest'  => true,
+    );
+
+    // Change 'product' here if you need to avoid WooCommerce conflicts.
+    register_post_type('product', $args);
+}
+add_action('init', 'create_posttype_products');
+
+
+/* --- Taxonomy: Product Categories --- */
+function create_product_taxonomy() {
+    $labels = array(
+        'name'              => _x('Product Categories', 'taxonomy general name'),
+        'singular_name'     => _x('Product Category', 'taxonomy singular name'),
+        'search_items'      => __('Search Product Categories'),
+        'all_items'         => __('All Product Categories'),
+        'parent_item'       => __('Parent Category'),
+        'parent_item_colon' => __('Parent Category:'),
+        'edit_item'         => __('Edit Product Category'),
+        'update_item'       => __('Update Product Category'),
+        'add_new_item'      => __('Add New Product Category'),
+        'new_item_name'     => __('New Product Category Name'),
+        'menu_name'         => __('Product Categories'),
+    );
+
+    $args = array(
+        'hierarchical'       => true,
+        'labels'             => $labels,
+        'show_ui'            => true,
+        'show_admin_column'  => true,
+        'query_var'          => 'product_category',
+        'rewrite'            => array(
+            'slug'         => 'products',   // /products/{term}
+            'with_front'   => false,
+            'hierarchical' => true,
+        ),
+        'public'             => true,
+        'publicly_queryable' => true,
+        'show_in_nav_menus'  => true,
+        'show_in_rest'       => true,
+    );
+
+    register_taxonomy('product_category', array('product'), $args);
+}
+add_action('init', 'create_product_taxonomy', 0);
+
+
+/* --- Replace %product_category% in single permalinks --- */
+function products_permalink_structure($permalink, $post) {
+    if ($post->post_type !== 'product') {
+        return $permalink;
+    }
+    // Choose a category (could use Yoast primary if you prefer)
+    $terms = wp_get_post_terms($post->ID, 'product_category', array('orderby' => 'term_order'));
+    $category = (!empty($terms) && !is_wp_error($terms)) ? $terms[0]->slug : 'uncategorized';
+    return str_replace('%product_category%', $category, $permalink);
+}
+add_filter('post_type_link', 'products_permalink_structure', 10, 2);
+
+
+/* --- Rewrite rules to resolve /products/{category}/{post} and archive --- */
+function products_add_rewrite_rules() {
+    // Singles: /products/{category}/{post}
+    add_rewrite_rule(
+        '^products/([^/]+)/([^/]+)/?$',
+        'index.php?product=$matches[2]&product_category=$matches[1]',
+        'top'
+    );
+
+    // Archive: /products
+    add_rewrite_rule(
+        '^products/?$',
+        'index.php?post_type=product',
+        'top'
+    );
+}
+add_action('init', 'products_add_rewrite_rules');
+
+
+/* --- Make WP recognize the %product_category% placeholder --- */
+function products_add_rewrite_tag() {
+    add_rewrite_tag('%product_category%', '([^&/]+)', 'product_category=');
+}
+add_action('init', 'products_add_rewrite_tag');
+
+/* Tip: After deploying, visit Settings → Permalinks to flush rules (or run flush_rewrite_rules() once). */
