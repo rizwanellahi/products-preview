@@ -35,20 +35,33 @@ $term = get_queried_object();
               <tr>
                 <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-600">Product</th>
                 <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-600">Description</th>
-                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-600">SKU</th>
-                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-600">Price</th>
+                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-600">Shop Domain</th>
+                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-600">Landers Domain</th>
+                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-600">AdvtID</th>
                 <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-600">Categories</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-100">
               <?php while (have_posts()) : the_post();
-                $price = get_post_meta(get_the_ID(), '_price', true);
-                $sku   = get_post_meta(get_the_ID(), '_sku', true);
+                $shop_domain    = function_exists('get_field') ? get_field('shop_domain')    : get_post_meta(get_the_ID(), 'shop_domain', true);
+                $landers_domain = function_exists('get_field') ? get_field('landers_domain') : get_post_meta(get_the_ID(), 'landers_domain', true);
+                $advt_id        = function_exists('get_field') ? get_field('advt_id')        : get_post_meta(get_the_ID(), 'advt_id', true);
+
                 $excerpt = get_the_excerpt();
                 if (!$excerpt) {
                   $excerpt = wp_trim_words(wp_strip_all_tags(get_the_content('')), 24, '…');
                 }
                 $row_terms = get_the_terms(get_the_ID(), 'product_category');
+
+                $format_domain = function($val) {
+                  if (empty($val)) return '—';
+                  $url = (stripos($val, 'http://') === 0 || stripos($val, 'https://') === 0)
+                    ? $val
+                    : 'https://' . ltrim($val, '/');
+                  return '<a class="text-slate-900 hover:underline break-all" href="' . esc_url($url) . '" target="_blank" rel="noopener noreferrer">' . esc_html($val) . '</a>';
+                };
+                $shop_display    = $format_domain($shop_domain);
+                $landers_display = $format_domain($landers_domain);
               ?>
                 <tr class="hover:bg-slate-50">
                   <td class="px-4 py-3 align-top">
@@ -64,8 +77,9 @@ $term = get_queried_object();
                     </div>
                   </td>
                   <td class="px-4 py-3 align-top text-sm text-slate-700"><?php echo esc_html($excerpt); ?></td>
-                  <td class="px-4 py-3 align-top text-sm text-slate-700"><?php echo $sku ? esc_html($sku) : '—'; ?></td>
-                  <td class="px-4 py-3 align-top text-sm text-slate-900 font-semibold"><?php echo $price !== '' ? esc_html($price) : '—'; ?></td>
+                  <td class="px-4 py-3 align-top text-sm"><?php echo $shop_display; // intentionally not escaped ?></td>
+                  <td class="px-4 py-3 align-top text-sm"><?php echo $landers_display; // intentionally not escaped ?></td>
+                  <td class="px-4 py-3 align-top text-sm text-slate-900 font-semibold"><?php echo $advt_id !== '' ? esc_html($advt_id) : '—'; ?></td>
                   <td class="px-4 py-3 align-top">
                     <?php if ($row_terms && !is_wp_error($row_terms)) : ?>
                       <div class="flex flex-wrap gap-1.5">
