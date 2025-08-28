@@ -23,9 +23,6 @@ function assets_enqueues()
     $app_js_version = file_exists($app_js_file) ? filemtime($app_js_file) : '1.0';  // Check if file exists
 
     wp_enqueue_script('jquery-js', $url_template . '/themes/products-preview/vendor/js/jquery.min.js', array(), null, true);
-    wp_enqueue_script('modal-js', $url_template . '/themes/products-preview/vendor/js/microModal.min.js', array(), null, true);
-    wp_enqueue_script('glide-js', $url_template . '/themes/products-preview/vendor/js/glide.min.js', array(), null, true);
-    wp_enqueue_script('menu-js', $url_template . '/themes/products-preview/build/js/restaurant-menu.js', array(), $app_js_version, true);
     wp_enqueue_script('app-js', $url_template . '/themes/products-preview/build/js/app.js', array(), $app_js_version, true);
 
 }

@@ -18,7 +18,8 @@ $all_terms    = get_the_terms(get_the_ID(), 'funnel_category');
   <!-- Hero -->
   <section class="relative">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-10">
-      <nav class="text-sm text-slate-600 mb-4">
+      <nav class="text-sm text-slate-600 mb-4 flex justify-between items-center">
+        <div>
         <a href="<?php echo esc_url(home_url('/')); ?>" class="hover:underline">Home</a>
         <span class="mx-2">/</span>
         <a href="<?php echo esc_url(get_post_type_archive_link('funnel')); ?>" class="hover:underline">Funnels</a>
@@ -28,9 +29,17 @@ $all_terms    = get_the_terms(get_the_ID(), 'funnel_category');
             <?php echo esc_html($primary_term->name); ?>
           </a>
         <?php endif; ?>
+        </div>
+
+        <a href="<?php echo esc_url(home_url('/')); ?>"
+          class="inline-flex items-center rounded-xl border border-slate-200 px-4 sm:px-6 py-2 bg-slate-800 sm:py-4 text-sm font-medium text-slate-100 hover:bg-slate-700">
+          Home
+        </a>
+
       </nav>
 
       <header class="mb-6">
+        <div>
         <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-slate-900">
           <?php echo esc_html(get_the_title()); ?>
         </h1>
@@ -39,12 +48,15 @@ $all_terms    = get_the_terms(get_the_ID(), 'funnel_category');
           <div class="mt-4 flex flex-wrap gap-2">
             <?php foreach ($all_terms as $t): ?>
               <a href="<?php echo esc_url(get_term_link($t)); ?>"
-                class="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700 hover:bg-slate-200">
+                class="inline-flex items-center rounded-full bg-slate-200 px-3 py-1 text-xs font-medium text-slate-700 hover:bg-slate-300">
                 <?php echo esc_html($t->name); ?>
               </a>
             <?php endforeach; ?>
           </div>
         <?php endif; ?>
+        </div>
+
+
       </header>
     </div>
 
@@ -175,7 +187,7 @@ $all_terms    = get_the_terms(get_the_ID(), 'funnel_category');
                 </div>
               </a>
               <div class="p-3 sm:p-5">
-                            <h3 class="text-base sm:text-lg font-semibold leading-tight text-slate-900">
+                            <h3 class="text-sm sm:text-lg font-semibold leading-tight text-slate-900">
                   <a href="<?php the_permalink(); ?>" class="hover:underline"><?php the_title(); ?></a>
                 </h3>
                 <p class="mt-2 text-sm text-slate-600">

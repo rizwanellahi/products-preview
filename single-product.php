@@ -3,7 +3,8 @@
  * Single Template for Product
  * File: single-product.php
  * Notes:
- * - Shows breadcrumbs with current product at the end
+ * - Two-column main row: left = featured image (50%), right = meta + content (50%)
+ * - Breadcrumbs, tags, prev/next, related posts kept intact
  * - Meta cards use ACF fields: shop_domain, landers_domain, advt_id (fallback to post meta)
  */
 
@@ -16,24 +17,27 @@ $all_terms    = get_the_terms(get_the_ID(), 'product_category');
 ?>
 
 <main id="primary" class="min-h-screen bg-slate-50">
-  <!-- Hero -->
+  <!-- Top: Breadcrumbs, Title, Tags -->
   <section class="relative">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-10">
       <!-- Breadcrumbs (end with current product title) -->
-      <nav class="text-sm text-slate-600 mb-4">
-        <a href="<?php echo esc_url(home_url('/')); ?>" class="hover:underline">Home</a>
-        <span class="mx-2">/</span>
-        <a href="<?php echo esc_url(get_post_type_archive_link('product')); ?>" class="hover:underline">Products</a>
-        <?php if ($primary_term): ?>
+      <nav class="text-sm text-slate-600 mb-4 flex justify-between items-center">
+        <div>
+          <a href="<?php echo esc_url(home_url('/')); ?>" class="hover:underline">Home</a>
           <span class="mx-2">/</span>
-          <a class="hover:underline" href="<?php echo esc_url(get_term_link($primary_term)); ?>">
-            <?php echo esc_html($primary_term->name); ?>
-          </a>
-        <?php endif; ?>
-        <span class="mx-2">/</span>
-        <span class="text-slate-900 font-medium" aria-current="page">
-          <?php echo esc_html(get_the_title()); ?>
-        </span>
+          <a href="<?php echo esc_url(get_post_type_archive_link('product')); ?>" class="hover:underline">Products</a>
+          <?php if ($primary_term): ?>
+            <span class="mx-2">/</span>
+            <a class="hover:underline" href="<?php echo esc_url(get_term_link($primary_term)); ?>">
+              <?php echo esc_html($primary_term->name); ?>
+            </a>
+          <?php endif; ?>
+        </div>
+
+        <a href="<?php echo esc_url(home_url('/')); ?>"
+          class="inline-flex items-center rounded-xl border border-slate-200 px-4 sm:px-6 py-2 bg-slate-800 sm:py-4 text-sm font-medium text-slate-100 hover:bg-slate-700">
+          Home
+        </a>
       </nav>
 
       <header class="mb-6">
@@ -45,7 +49,7 @@ $all_terms    = get_the_terms(get_the_ID(), 'product_category');
           <div class="mt-4 flex flex-wrap gap-2">
             <?php foreach ($all_terms as $t): ?>
               <a href="<?php echo esc_url(get_term_link($t)); ?>"
-                 class="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700 hover:bg-slate-200">
+                 class="inline-flex items-center rounded-full bg-slate-200 px-3 py-1 text-xs font-medium text-slate-700 hover:bg-slate-300">
                 <?php echo esc_html($t->name); ?>
               </a>
             <?php endforeach; ?>
@@ -53,72 +57,82 @@ $all_terms    = get_the_terms(get_the_ID(), 'product_category');
         <?php endif; ?>
       </header>
     </div>
-
-    <?php if (has_post_thumbnail()) : ?>
-      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div class="overflow-hidden rounded-3xl ring-1 ring-slate-200 shadow-sm">
-          <?php the_post_thumbnail('1536x1536', [
-            'class' => 'w-full h-auto object-cover',
-            'loading' => 'eager',
-            'alt' => esc_attr(get_the_title()),
-          ]); ?>
-        </div>
-      </div>
-    <?php endif; ?>
   </section>
 
-  <!-- Meta (Shop Domain / Landers Domain / AdvtID) -->
+  <!-- Main Row: 2 Columns (50% / 50%) -->
   <section class="relative">
-    <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 mt-6">
-      <?php
-        $shop_domain    = function_exists('get_field') ? get_field('shop_domain')    : get_post_meta(get_the_ID(), 'shop_domain', true);
-        $landers_domain = function_exists('get_field') ? get_field('landers_domain') : get_post_meta(get_the_ID(), 'landers_domain', true);
-        $advt_id        = function_exists('get_field') ? get_field('advt_id')        : get_post_meta(get_the_ID(), 'advt_id', true);
-
-        $format_domain = function($val) {
-          if (empty($val)) return '—';
-          $url = (stripos($val, 'http://') === 0 || stripos($val, 'https://') === 0)
-            ? $val
-            : 'https://' . ltrim($val, '/');
-          return '<a class="text-slate-900 hover:underline break-all" href="' . esc_url($url) . '" target="_blank" rel="noopener noreferrer">' . esc_html($val) . '</a>';
-        };
-
-        $shop_display    = $format_domain($shop_domain);
-        $landers_display = $format_domain($landers_domain);
-      ?>
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div class="rounded-2xl bg-white p-4 ring-1 ring-slate-200">
-          <div class="text-xs uppercase tracking-wide text-slate-500">Shop Domain</div>
-          <div class="mt-1 font-medium text-slate-900"><?php echo $shop_display; // intentionally not escaped ?></div>
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-10">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+        <!-- Left: Featured Image -->
+        <div>
+          <?php if (has_post_thumbnail()) : ?>
+            <div class="overflow-hidden rounded-3xl ring-1 ring-slate-200 shadow-sm">
+              <?php the_post_thumbnail('1536x1536', [
+                'class' => 'w-full h-auto object-cover',
+                'loading' => 'eager',
+                'alt' => esc_attr(get_the_title()),
+              ]); ?>
+            </div>
+          <?php else : ?>
+            <div class="aspect-[4/3] w-full rounded-3xl ring-1 ring-slate-200 bg-gradient-to-br from-slate-100 to-slate-200"></div>
+          <?php endif; ?>
         </div>
-        <div class="rounded-2xl bg-white p-4 ring-1 ring-slate-200">
-          <div class="text-xs uppercase tracking-wide text-slate-500">Landers Domain</div>
-          <div class="mt-1 font-medium text-slate-900"><?php echo $landers_display; // intentionally not escaped ?></div>
-        </div>
-        <div class="rounded-2xl bg-white p-4 ring-1 ring-slate-200">
-          <div class="text-xs uppercase tracking-wide text-slate-500">AdvtID</div>
-          <div class="mt-1 font-medium text-slate-900"><?php echo $advt_id !== '' ? esc_html($advt_id) : '—'; ?></div>
+
+        <!-- Right: Meta + Content -->
+        <div class="space-y-6">
+          <?php
+            $shop_domain    = function_exists('get_field') ? get_field('shop_domain')    : get_post_meta(get_the_ID(), 'shop_domain', true);
+            $landers_domain = function_exists('get_field') ? get_field('landers_domain') : get_post_meta(get_the_ID(), 'landers_domain', true);
+            $advt_id        = function_exists('get_field') ? get_field('advt_id')        : get_post_meta(get_the_ID(), 'advt_id', true);
+
+            $format_domain = function($val) {
+              if (empty($val)) return '—';
+              $url = (stripos($val, 'http://') === 0 || stripos($val, 'https://') === 0)
+                ? $val
+                : 'https://' . ltrim($val, '/');
+              return '<a class="text-xs sm:text-base text-slate-900 hover:underline break-all" href="' . esc_url($url) . '" target="_blank" rel="noopener noreferrer">' . esc_html($val) . '</a>';
+            };
+
+            $shop_display    = $format_domain($shop_domain);
+            $landers_display = $format_domain($landers_domain);
+          ?>
+
+          <!-- Meta Cards -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="rounded-2xl bg-white p-4 ring-1 ring-slate-200">
+              <div class="text-xs uppercase tracking-wide text-slate-500">Shop Domain</div>
+              <div class="mt-1 font-medium text-slate-900"><?php echo $shop_display; // intentionally not escaped ?></div>
+            </div>
+            <div class="rounded-2xl bg-white p-4 ring-1 ring-slate-200">
+              <div class="text-xs uppercase tracking-wide text-slate-500">Landers Domain</div>
+              <div class="mt-1 font-medium text-slate-900"><?php echo $landers_display; // intentionally not escaped ?></div>
+            </div>
+            <div class="rounded-2xl bg-white p-4 ring-1 ring-slate-200">
+              <div class="text-xs uppercase tracking-wide text-slate-500">AdvtID</div>
+              <div class="mt-1 font-medium text-slate-900"><?php echo $advt_id !== '' ? esc_html($advt_id) : '—'; ?></div>
+            </div>
+          </div>
+
+          <!-- Content -->
+          <?php if (trim(get_the_content()) !== '') : ?>
+            <article class="prose prose-slate max-w-none bg-white rounded-3xl ring-1 ring-slate-200 shadow-sm p-6 sm:p-8">
+              <?php
+              the_content();
+              wp_link_pages([
+                'before' => '<div class="mt-6 border-t pt-4 text-sm text-slate-600"><span class="font-medium">Pages:</span> ',
+                'after'  => '</div>',
+              ]);
+              ?>
+            </article>
+          <?php endif; ?>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Body -->
+  <!-- Prev / Next (within taxonomy) -->
   <section class="relative">
-    <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-10">
-      <?php if (trim(get_the_content()) !== '') : ?>
-        <article class="prose prose-slate max-w-none bg-white rounded-3xl ring-1 ring-slate-200 shadow-sm p-6 sm:p-8">
-          <?php
-          the_content();
-          wp_link_pages([
-            'before' => '<div class="mt-6 border-t pt-4 text-sm text-slate-600"><span class="font-medium">Pages:</span> ',
-            'after'  => '</div>',
-          ]);
-          ?>
-        </article>
-      <?php endif; ?>
-
-      <!-- Prev / Next (within taxonomy) -->
+    <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
       <nav class="mt-8 flex items-center justify-between gap-4">
         <div class="flex-1">
           <?php $prev = get_previous_post(true, '', 'product_category'); ?>
@@ -146,7 +160,7 @@ $all_terms    = get_the_terms(get_the_ID(), 'product_category');
     </div>
   </section>
 
-  <!-- Related Products -->
+  <!-- Related Products (unchanged) -->
   <?php
   $related = null;
   if ($primary_term) {
@@ -186,7 +200,7 @@ $all_terms    = get_the_terms(get_the_ID(), 'product_category');
                 </div>
               </a>
               <div class="p-3 sm:p-5">
-                <h3 class="text-base sm:text-lg font-semibold leading-tight text-slate-900">
+                <h3 class="text-sm sm:text-lg font-semibold leading-tight text-slate-900">
                   <a href="<?php the_permalink(); ?>" class="hover:underline"><?php the_title(); ?></a>
                 </h3>
                 <p class="mt-2 text-sm text-slate-600">

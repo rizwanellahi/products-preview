@@ -11,6 +11,10 @@
 get_header();
 
 // Fetch all funnel categories (only those that have posts; set hide_empty => false to show all)
+
+$total_funnel_posts = 0;
+
+
 $terms = get_terms([
   'taxonomy'   => 'funnel_category',
   'hide_empty' => true,
@@ -18,15 +22,30 @@ $terms = get_terms([
   'order'      => 'DESC',  // most posts first
 ]);
 
+foreach ($terms as $term) {
+  $total_funnel_posts += $term->count;
+}
+
 ?>
 <main id="primary" class="min-h-screen bg-slate-50">
   <a id="top" class="sr-only">Top</a>
 
   <section class="relative">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
-      <header class="mb-8">
-        <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-slate-900">Funnels</h1>
-        <p class="mt-2 text-slate-600">Browse all funnels with categories.</p>
+      <header class="mb-8 flex justify-between items-center">
+        <div>
+          <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-slate-900 flex items-center">Funnels
+            <span class="ml-2 inline-flex items-center rounded-full bg-slate-900 px-4 py-1 text-xl font-medium text-slate-100">
+              <?php echo $total_funnel_posts; ?>
+            </span>
+          </h1>
+          <p class="mt-2 text-slate-600">Browse all funnels with categories.</p>
+        </div>
+        <a href="<?php echo esc_url(home_url('/')); ?>"
+          class="inline-flex items-center rounded-xl border border-slate-200 px-4 sm:px-6 py-2 bg-slate-800 sm:py-4 text-sm font-medium text-slate-100 hover:bg-slate-700">
+          Home
+        </a>
+
       </header>
 
       <?php if (!is_wp_error($terms) && !empty($terms)) : ?>
@@ -46,7 +65,7 @@ $terms = get_terms([
                   <a href="#<?php echo esc_attr($anchor_id); ?>"
                     class="block rounded-xl border border-slate-200 px-3 py-2 text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition">
                     <span class="font-medium"><?php echo esc_html($term->name); ?></span>
-                    <span class="ml-2 inline-flex items-center justify-center rounded-full bg-slate-100 px-2 text-xs text-slate-600 align-middle">
+                    <span class="ml-2 inline-flex items-center justify-center rounded-full bg-slate-200 px-2 text-xs text-slate-700 align-middle">
                       <?php echo intval($term->count); ?>
                     </span>
                   </a>
@@ -86,9 +105,9 @@ $terms = get_terms([
                     <a href="<?php echo esc_url($term_link); ?>">
                       <div class="flex flex-row items-center gap-2">
                         <h2 class="text-2xl sm:text-3xl font-bold text-slate-900"><?php echo esc_html($term->name); ?></h2>
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" />
-                      </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" />
+                        </svg>
                       </div>
                     </a>
                     <?php
@@ -118,7 +137,7 @@ $terms = get_terms([
                           </a>
 
                           <div class="p-3 sm:p-5">
-                            <h3 class="text-base sm:text-lg font-semibold leading-tight text-slate-900">
+                            <h3 class="text-sm sm:text-lg font-semibold leading-tight text-slate-900">
                               <a href="<?php the_permalink(); ?>" class="hover:underline">
                                 <?php the_title(); ?>
                               </a>

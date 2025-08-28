@@ -9,18 +9,30 @@ $term = get_queried_object();
   <section class="relative">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
       <!-- Breadcrumbs -->
-      <nav class="text-sm text-slate-600 mb-4">
+      <nav class="text-sm text-slate-600 mb-4 flex justify-between items-center">
+        <div>
         <a href="<?php echo esc_url( home_url('/') ); ?>" class="hover:underline">Home</a>
         <span class="mx-2">/</span>
         <a href="<?php echo esc_url( get_post_type_archive_link('funnel') ); ?>" class="hover:underline">Funnels</a>
         <span class="mx-2">/</span>
         <span class="text-slate-900 font-medium"><?php single_term_title(); ?></span>
+        </div>
+
+        <a href="<?php echo esc_url(home_url('/')); ?>"
+          class="inline-flex items-center rounded-xl border border-slate-200 px-4 sm:px-6 py-2 bg-slate-800 sm:py-4 text-sm font-medium text-slate-100 hover:bg-slate-700">
+          Home
+        </a>
+
       </nav>
 
       <!-- Header -->
       <header class="mb-8">
-        <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-slate-900">
+        <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-slate-900 flex items-center">
           <?php echo esc_html( single_term_title('', false) ); ?>
+          
+          <span class="ml-4 inline-flex items-center rounded-full bg-slate-900 px-4 py-1 text-xl font-medium text-slate-100">
+              <?php echo esc_html( $term->count ); ?>
+            </span>
         </h1>
         <?php if ( term_description() ) : ?>
           <div class="prose prose-slate max-w-none mt-3 text-slate-700">
@@ -49,7 +61,7 @@ $term = get_queried_object();
               </a>
 
               <div class="p-3 sm:p-5">
-                            <h3 class="text-base sm:text-lg font-semibold leading-tight text-slate-900">
+                            <h3 class="text-sm sm:text-lg font-semibold leading-tight text-slate-900">
                   <a href="<?php the_permalink(); ?>" class="hover:underline"><?php the_title(); ?></a>
                 </h2>
 

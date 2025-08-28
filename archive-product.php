@@ -16,6 +16,8 @@ $terms = get_terms([
   'order'      => 'ASC',
 ]);
 
+$total_products = wp_count_posts('product')->publish;
+
 ?>
 <main id="primary" class="min-h-screen bg-slate-50">
   <a id="top" class="sr-only">Top</a>
@@ -23,8 +25,21 @@ $terms = get_terms([
   <section class="relative">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
       <header class="mb-8">
-        <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-slate-900">Products</h1>
+        <header class="mb-8 flex justify-between items-center">
+        <div>
+        <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-slate-900 flex items-center">
+          Products
+          <span class="ml-2 inline-flex items-center rounded-full bg-slate-900 px-4 py-1 text-xl font-medium text-slate-100">
+              <?php echo $total_products; ?>
+            </span>
+        </h1>
         <p class="mt-2 text-slate-600">Browse all products by category.</p>
+        </div>
+
+         <a href="<?php echo esc_url(home_url('/')); ?>"
+          class="inline-flex items-center rounded-xl border border-slate-200 px-4 sm:px-6 py-2 bg-slate-800 sm:py-4 text-sm font-medium text-slate-100 hover:bg-slate-700">
+          Home
+        </a>
       </header>
 
       <?php if (!is_wp_error($terms) && !empty($terms)) : ?>
@@ -39,7 +54,7 @@ $terms = get_terms([
                   <a href="#<?php echo esc_attr($anchor_id); ?>"
                      class="block rounded-xl border border-slate-200 px-3 py-2 text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition">
                     <span class="font-medium"><?php echo esc_html($term->name); ?></span>
-                    <span class="ml-2 inline-flex items-center justify-center rounded-full bg-slate-100 px-2 text-xs text-slate-600 align-middle">
+                    <span class="ml-2 inline-flex items-center justify-center rounded-full bg-slate-200 px-2 text-xs text-slate-700 align-middle">
                       <?php echo intval($term->count); ?>
                     </span>
                   </a>
@@ -89,12 +104,10 @@ $terms = get_terms([
                       <table class="min-w-full divide-y divide-slate-200">
                         <thead class="bg-slate-50">
                           <tr>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-600">Product</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-600">Description</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-600">Shop Domain</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-600">Landers Domain</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-600">AdvtID</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-600">Categories</th>
+                            <th class="text-xs sm:text-base px-3 sm:px-4 py-2 sm:py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-600">Product</th>
+                            <th class="text-xs sm:text-base px-3 sm:px-4 py-2 sm:py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-600">Shop Domain</th>
+                            <th class="text-xs sm:text-base px-3 sm:px-4 py-2 sm:py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-600">AdvtID</th>
+                            <th class="text-xs sm:text-base px-3 sm:px-4 py-2 sm:py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-600">Category</th>
                           </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-100">
@@ -115,7 +128,7 @@ $terms = get_terms([
                               $url = (stripos($val, 'http://') === 0 || stripos($val, 'https://') === 0)
                                 ? $val
                                 : 'https://' . ltrim($val, '/');
-                              return '<a class="text-slate-900 hover:underline break-all" href="' . esc_url($url) . '" target="_blank" rel="noopener noreferrer">' . esc_html($val) . '</a>';
+                              return '<a class="text-xs sm:text-base text-slate-900 hover:underline break-all" href="' . esc_url($url) . '" target="_blank" rel="noopener noreferrer">' . esc_html($val) . '</a>';
                             };
                             $shop_display    = $format_domain($shop_domain);
                             $landers_display = $format_domain($landers_domain);
@@ -129,13 +142,11 @@ $terms = get_terms([
                                     } ?>
                                   </a>
                                   <div>
-                                    <a href="<?php the_permalink(); ?>" class="font-medium text-slate-900 hover:underline"><?php the_title(); ?></a>
+                                    <a href="<?php the_permalink(); ?>" class="text-xs sm:text-base font-medium text-slate-900 hover:underline"><?php the_title(); ?></a>
                                   </div>
                                 </div>
                               </td>
-                              <td class="px-4 py-3 align-top text-sm text-slate-700"><?php echo esc_html($excerpt); ?></td>
                               <td class="px-4 py-3 align-top text-sm"><?php echo $shop_display; // intentionally not escaped ?></td>
-                              <td class="px-4 py-3 align-top text-sm"><?php echo $landers_display; // intentionally not escaped ?></td>
                               <td class="px-4 py-3 align-top text-sm text-slate-900 font-semibold"><?php echo $advt_id !== '' ? esc_html($advt_id) : '—'; ?></td>
                               <td class="px-4 py-3 align-top">
                                 <?php if ($row_terms && !is_wp_error($row_terms)) : ?>
