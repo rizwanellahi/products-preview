@@ -115,8 +115,9 @@ $all_terms    = get_the_terms(get_the_ID(), 'funnel_category');
         */
           ?>
         </article>
-        
-        <?php 
+      <?php endif; ?>
+<!-- Funnel used: Last Time -->
+      <?php 
         $featured_post = get_field('last_product_used');
         if($featured_post): ?>
         <article class="mt-6 prose prose-slate max-w-none bg-white rounded-3xl ring-1 ring-slate-200 shadow-sm p-6 sm:p-8 space-y-4">
@@ -130,13 +131,9 @@ $all_terms    = get_the_terms(get_the_ID(), 'funnel_category');
             <a href="<?php echo esc_html($permalink); ?>" class="inline-flex items-center rounded-xl border border-slate-200 px-4 sm:px-6 py-2 bg-slate-800 sm:py-4 text-sm font-medium text-slate-100 hover:bg-slate-700">
           Go to Product
         </a>
-
           <?php endif; ?>
-
         </article>
         <?php endif; ?>
-
-      <?php endif; ?>
 
       <!-- Prev / Next -->
       <nav class="mt-8 flex items-center justify-between gap-4">
