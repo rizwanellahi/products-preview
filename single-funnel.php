@@ -115,10 +115,12 @@ $all_terms    = get_the_terms(get_the_ID(), 'funnel_category');
         */
           ?>
         </article>
-
+        
+        <?php 
+        $featured_post = get_field('last_product_used');
+        if($featured_post): ?>
         <article class="mt-6 prose prose-slate max-w-none bg-white rounded-3xl ring-1 ring-slate-200 shadow-sm p-6 sm:p-8 space-y-4">
           <?php
-          $featured_post = get_field('last_product_used');
           $permalink = get_permalink($featured_post->ID);
           if ($featured_post): ?>
             <h3 class="text-2xl font-semibold">
@@ -132,6 +134,7 @@ $all_terms    = get_the_terms(get_the_ID(), 'funnel_category');
           <?php endif; ?>
 
         </article>
+        <?php endif; ?>
 
       <?php endif; ?>
 
