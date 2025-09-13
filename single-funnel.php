@@ -20,15 +20,15 @@ $all_terms    = get_the_terms(get_the_ID(), 'funnel_category');
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-10">
       <nav class="text-sm text-slate-600 mb-4 flex justify-between items-center">
         <div>
-        <a href="<?php echo esc_url(home_url('/')); ?>" class="hover:underline">Home</a>
-        <span class="mx-2">/</span>
-        <a href="<?php echo esc_url(get_post_type_archive_link('funnel')); ?>" class="hover:underline">Funnels</a>
-        <?php if ($primary_term): ?>
+          <a href="<?php echo esc_url(home_url('/')); ?>" class="hover:underline">Home</a>
           <span class="mx-2">/</span>
-          <a class="hover:underline" href="<?php echo esc_url(get_term_link($primary_term)); ?>">
-            <?php echo esc_html($primary_term->name); ?>
-          </a>
-        <?php endif; ?>
+          <a href="<?php echo esc_url(get_post_type_archive_link('funnel')); ?>" class="hover:underline">Funnels</a>
+          <?php if ($primary_term): ?>
+            <span class="mx-2">/</span>
+            <a class="hover:underline" href="<?php echo esc_url(get_term_link($primary_term)); ?>">
+              <?php echo esc_html($primary_term->name); ?>
+            </a>
+          <?php endif; ?>
         </div>
 
         <a href="<?php echo esc_url(home_url('/')); ?>"
@@ -40,20 +40,20 @@ $all_terms    = get_the_terms(get_the_ID(), 'funnel_category');
 
       <header class="mb-6">
         <div>
-        <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-slate-900">
-          <?php echo esc_html(get_the_title()); ?>
-        </h1>
+          <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-slate-900">
+            <?php echo esc_html(get_the_title()); ?>
+          </h1>
 
-        <?php if ($all_terms && !is_wp_error($all_terms)) : ?>
-          <div class="mt-4 flex flex-wrap gap-2">
-            <?php foreach ($all_terms as $t): ?>
-              <a href="<?php echo esc_url(get_term_link($t)); ?>"
-                class="inline-flex items-center rounded-full bg-slate-200 px-3 py-1 text-xs font-medium text-slate-700 hover:bg-slate-300">
-                <?php echo esc_html($t->name); ?>
-              </a>
-            <?php endforeach; ?>
-          </div>
-        <?php endif; ?>
+          <?php if ($all_terms && !is_wp_error($all_terms)) : ?>
+            <div class="mt-4 flex flex-wrap gap-2">
+              <?php foreach ($all_terms as $t): ?>
+                <a href="<?php echo esc_url(get_term_link($t)); ?>"
+                  class="inline-flex items-center rounded-full bg-slate-200 px-3 py-1 text-xs font-medium text-slate-700 hover:bg-slate-300">
+                  <?php echo esc_html($t->name); ?>
+                </a>
+              <?php endforeach; ?>
+            </div>
+          <?php endif; ?>
         </div>
 
 
@@ -115,6 +115,24 @@ $all_terms    = get_the_terms(get_the_ID(), 'funnel_category');
         */
           ?>
         </article>
+
+        <article class="mt-6 prose prose-slate max-w-none bg-white rounded-3xl ring-1 ring-slate-200 shadow-sm p-6 sm:p-8 space-y-4">
+          <?php
+          $featured_post = get_field('last_product_used');
+          $permalink = get_permalink($featured_post->ID);
+          if ($featured_post): ?>
+            <h3 class="text-2xl font-semibold">
+              <span class="text-xl font-normal">Last used: </span>
+              <?php echo esc_html($featured_post->post_title); ?>
+            </h3>
+            <a href="<?php echo esc_html($permalink); ?>" class="inline-flex items-center rounded-xl border border-slate-200 px-4 sm:px-6 py-2 bg-slate-800 sm:py-4 text-sm font-medium text-slate-100 hover:bg-slate-700">
+          Go to Product
+        </a>
+
+          <?php endif; ?>
+
+        </article>
+
       <?php endif; ?>
 
       <!-- Prev / Next -->
@@ -187,7 +205,7 @@ $all_terms    = get_the_terms(get_the_ID(), 'funnel_category');
                 </div>
               </a>
               <div class="p-3 sm:p-5">
-                            <h3 class="text-sm sm:text-lg font-semibold leading-tight text-slate-900">
+                <h3 class="text-sm sm:text-lg font-semibold leading-tight text-slate-900">
                   <a href="<?php the_permalink(); ?>" class="hover:underline"><?php the_title(); ?></a>
                 </h3>
                 <p class="mt-2 text-sm text-slate-600">
